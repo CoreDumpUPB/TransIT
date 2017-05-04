@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using BestemAPI.Models;
+using BestemAPI.Models.ConnectionManager;
 
 namespace BestemAPI.Controllers
 {
@@ -13,29 +14,33 @@ namespace BestemAPI.Controllers
         // GET: api/Jobs
         public IEnumerable<Job> Get()
         {
-            return ConnectionManager.getJobs();
+            //return ConnectionManager.getJobs();
+
+            return null;
         }
 
 
         public bool Get(int id, int status)
         {
             JobMatcher matcher = new JobMatcher();
-            return matcher.match(ConnectionManager.getJobsById(id).ElementAt(0));
+            return matcher.match(JobManager.GetJobsByUserId(id).ElementAt(0));
         }
         // GET: api/Jobs/5
         public IEnumerable<Job> Get(int id)
         {
-            return ConnectionManager.getJobsById(id);
+            return JobManager.GetJobsByUserId(id);
         }
 
 
         public IEnumerable<Job> Get(int userID, float lat1, float long1, float lat2, float long2, int transportType, int TransportMethod)
         {
-            Location l1 = ConnectionManager.searchLocation(lat1, long1);
-            Location l2 = ConnectionManager.searchLocation(lat2, long2);
-            ConnectionManager.insertIntermediateLocations(userID, l1, l2);
-            ConnectionManager.insertJob(new Job(-1, 0, 0, 0, 0, 0, DateTime.Now, DateTime.Now, 1, l1.locationID, l2.locationID));
-           return ConnectionManager.getJobs(userID, lat1, long1, lat2, long2, 0);
+            Location l1 = LocationManager.searchLocation(lat1, long1);
+            Location l2 = LocationManager.searchLocation(lat2, long2);
+            LocationManager.insertIntermediateLocations(userID, l1, l2);
+            JobManager.insertJob(new Job(-1, 0, 0, 0, 0, 0, DateTime.Now, DateTime.Now, 1, l1.locationID, l2.locationID));
+
+            return null;
+          // return JobManager.getJobs(userID, lat1, long1, lat2, long2, 0);
             //Job job = new Job(-1,0, 0, transportType,0,0,DateTime.Now, DateTime.Now,userID, new Location(lat1, long1), new Location(lat2, long2));
         }
 

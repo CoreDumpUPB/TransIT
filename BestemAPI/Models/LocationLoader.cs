@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BestemAPI.Models.ConnectionManager;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace BestemAPI.Models
             }
 
             //
-            ConnectionManager.insertLocation(list);
+            LocationManager.insertLocation(list);
             return list;
 
         }

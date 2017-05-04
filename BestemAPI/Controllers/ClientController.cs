@@ -8,17 +8,22 @@ using Microsoft.Azure.Search;
 using Newtonsoft.Json;
 using BestemAPI.Models;
 
-//bobi was here
+using BestemAPI.Models.ConnectionManager;
+
+
 namespace BestemAPI.Controllers
 {
     public class ClientController : ApiController
     {
         [HttpGet]
-        // GET: api/Client
-   
+        
+
+        [Route("api/Client/GetById/{id}")]
         public Object GetClientByID(int id)
         {
-            Client client = ConnectionManager.getClientbyID(id);
+
+
+           Client client = ClientManager.getClientbyID(id);
             if (client == null)
             {
 
@@ -27,10 +32,11 @@ namespace BestemAPI.Controllers
             return client;
         }
 
-        // GET: api/Client/{email}/{password}
+        [Route("api/Client/GetByEmailAndPass/{email}/{password}")]
+
         public Object GetClient( String email, String password)
         {
-            Client client = ConnectionManager.getClientbyEmail(email, password);
+            Client client = ClientManager.getClientbyEmail(email, password);
             if(client == null)
             {
                 return "client not found";
@@ -38,10 +44,13 @@ namespace BestemAPI.Controllers
             return client;
         }
 
-        [Route ("api/Client/{email}/null")]
+
+       
+        [Route("api/Client/GetByEmail/{email}")]
         public Object GetClientByEmail(String email)
         {
-            Client client = ConnectionManager.getClientbyEmail(email);
+            System.Diagnostics.Debug.Write("Request by email");
+            Client client = ClientManager.getClientbyEmail(email);
             if (client == null)
             {
 
@@ -50,12 +59,27 @@ namespace BestemAPI.Controllers
             return client;
         }
 
+
+       
+        [Route("api/Client/GetJobsByEmail/{email}")]
+        public Object GetClientJobsByEmail(String email) {
+            Client client = ClientManager.getClientbyEmail(email);
+            if (client.Jobs.Count == 0) {
+
+                return "client has no jobs";
+            }
+            return client.Jobs;
+        }
+
+
+
+
         [HttpPost]
         // POST: api/Client
         public Object Post([FromUri] String email, [FromUri] String password, [FromUri] String name, [FromUri] String phoneNumber)
         {
 
-            return ConnectionManager.insertClient(new Client(-1, name, phoneNumber, email, password));
+            return ClientManager.insertClient(new Client(-1, name, phoneNumber, email, password,null));
         }
 
 

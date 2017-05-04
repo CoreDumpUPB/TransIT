@@ -211,22 +211,25 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Models\ConnectionManager\ClientManager.cs" />
+    <Compile Include="Models\ConnectionManager\DbManager.cs" />
+    <Compile Include="Models\ConnectionManager\JobManager.cs" />
+    <Compile Include="Models\ConnectionManager\LocationManager.cs" />
     <Compile Include="Models\JobMatcher.cs" />
     <Compile Include="Models\LocationLoader.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Models\MapItem.cs" />
     <Compile Include="Models\TransportType.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ClientController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\ConnectionManager.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\TransportMethod.cs" />

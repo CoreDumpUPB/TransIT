@@ -7,21 +7,23 @@ namespace BestemAPI.Models
 {
     public class Client
     {
-        public Client(int clientID, string name, string phoneNumber, string email)
+        public Client(int clientID, string name, string phoneNumber, string email, List<Job> jobList)
         {
             this.clientID = clientID;
             this.name = name;
             this.phoneNumber = phoneNumber;
             this.email = email;
+            this.Jobs = jobList;
         }
 
-        public Client(int clientID, string name, string phoneNumber, string email, string password)
+        public Client(int clientID, string name, string phoneNumber, string email, string password, List<Job> jobList)
         {
             this.clientID = clientID;
             this.name = name;
             this.phoneNumber = phoneNumber;
             this.email = email;
             this.password = password;
+            this.Jobs = jobList;
         }
 
         public int clientID { get; set; }
@@ -29,6 +31,8 @@ namespace BestemAPI.Models
         public String phoneNumber { get; set; }
         public String email { get; set; }
         public String password { get; set; }
+
+        public List<Job> Jobs { get; set; } // every client has more jobs
 
     }
 }

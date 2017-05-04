@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
+using BestemAPI.Models.ConnectionManager;
 
 namespace BestemAPI.Models
 {
@@ -35,12 +36,12 @@ namespace BestemAPI.Models
             {
                 while (reader.Read())
                 {
-                    if (GetDistanceInKm(ConnectionManager.getLocation(newjob.startLocationID), Convert.ToDouble(reader[1]), Convert.ToDouble(reader[2])) < 30)
+                    if (GetDistanceInKm(LocationManager.getLocation(newjob.startLocationID), Convert.ToDouble(reader[1]), Convert.ToDouble(reader[2])) < 30)
                     {
                         startmatchid = Convert.ToInt32(reader[0]);
 
                     }
-                    if (GetDistanceInKm(ConnectionManager.getLocation(newjob.endLocationID), Convert.ToDouble(reader[1]), Convert.ToDouble(reader[2])) < 30)
+                    if (GetDistanceInKm(LocationManager.getLocation(newjob.endLocationID), Convert.ToDouble(reader[1]), Convert.ToDouble(reader[2])) < 30)
                     {
                         endmatchid = Convert.ToInt32(reader[0]);
 
