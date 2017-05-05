@@ -43,6 +43,7 @@ namespace BestemAPI.Models
                         if (IsTooClose(list[list.Count - 1], step.start_location))
                         {
                             list.Add(step.start_location);
+                            //System.Diagnostics.Debug.Write(step.start_location.ToString());
                         }
 
                     }
@@ -51,7 +52,7 @@ namespace BestemAPI.Models
             }
 
             //
-            LocationManager.insertLocation(list);
+            //LocationManager.insertLocation(list);
             return list;
 
         }

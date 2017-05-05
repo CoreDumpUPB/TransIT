@@ -32,17 +32,17 @@ namespace BestemAPI.Controllers
         }
 
 
-        public IEnumerable<Job> Get(int userID, float lat1, float long1, float lat2, float long2, int transportType, int TransportMethod)
+     /*   public IEnumerable<Job> Get(int userID, float lat1, float long1, float lat2, float long2, int transportType, int TransportMethod)
         {
             Location l1 = LocationManager.searchLocation(lat1, long1);
             Location l2 = LocationManager.searchLocation(lat2, long2);
-            LocationManager.insertIntermediateLocations(userID, l1, l2);
+           // LocationManager.insertIntermediateLocations(userID, l1, l2);
             JobManager.insertJob(new Job(-1, 0, 0, 0, 0, 0, DateTime.Now, DateTime.Now, 1, l1.locationID, l2.locationID));
 
             return null;
           // return JobManager.getJobs(userID, lat1, long1, lat2, long2, 0);
             //Job job = new Job(-1,0, 0, transportType,0,0,DateTime.Now, DateTime.Now,userID, new Location(lat1, long1), new Location(lat2, long2));
-        }
+        }*/
 
 
         // POST: api/Jobs

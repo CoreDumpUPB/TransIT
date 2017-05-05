@@ -13,8 +13,8 @@ namespace BestemAPI.Controllers
         // GET: api/Location
         public IEnumerable<Location> Get()
         {
-            Location ltest = new Location(44.434798f, 26.102869f);
-            Location ltest2 = new Location(45.272648f, 27.966757f);
+            Location ltest = new Location(10,"test1",44.434798f, 26.102869f);
+            Location ltest2 = new Location(10,"tet2",45.272648f, 27.966757f);
             LocationLoader loader = new LocationLoader();
             List<Location> list = loader.getIntermediateLocations(ltest, ltest2);
             return list;
@@ -23,8 +23,8 @@ namespace BestemAPI.Controllers
         // GET: api/Location/5
         public IEnumerable<Location> Get(int id)
         {
-            Location ltest = new Location(44.434798f, 26.102869f);
-            Location ltest2 = new Location(45.272648f, 27.966757f);
+            Location ltest = new Location(10, "test1",44.434798f, 26.102869f);
+            Location ltest2 = new Location(10, "tet2", 45.272648f, 27.966757f);
             LocationLoader loader = new LocationLoader();
             List<Location> list = loader.getIntermediateLocations(ltest, ltest2);
             return list;

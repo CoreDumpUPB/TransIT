@@ -79,7 +79,8 @@ namespace BestemAPI.Controllers
         public Object Post([FromUri] String email, [FromUri] String password, [FromUri] String name, [FromUri] String phoneNumber)
         {
 
-            return ClientManager.insertClient(new Client(-1, name, phoneNumber, email, password,null));
+            //return ClientManager.insertClient(new Client(-1, name, phoneNumber, email, password,null));
+            return null;
         }
 
 

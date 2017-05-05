@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BestemAPI.Models.ConnectionManager;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,7 +9,7 @@ namespace BestemAPI.Models
 {
     public class Job
     {
-        public Job(int jobID, int transportType, int status, int transportMethod, float capacity, float price, DateTime startDate, DateTime endDate, int userID, int startLocationID, int endLocationID)
+        public Job(int jobID, int transportType, int status, int transportMethod, float capacity, float price, DateTime startDate, DateTime endDate, int userID, Location startLocation, Location endLocation)
         {
             this.jobID = jobID;
             this.transportType = transportType;
@@ -18,8 +20,11 @@ namespace BestemAPI.Models
             this.startDate = startDate;
             this.endDate = endDate;
             this.userID = userID;
-            this.startLocationID = startLocationID;
-            this.endLocationID = endLocationID;
+            this.startLocation = startLocation;
+            this.endLocation = endLocation;
+            Locations = LocationManager.GetLocationsForJob(this);
+    
+
         }
 
         public int jobID { get; set; }
@@ -31,7 +36,10 @@ namespace BestemAPI.Models
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
         public int userID { get; set; }
-        public int startLocationID { get; set; }
-        public int endLocationID { get; set; }
+        public Location startLocation { get; set; }
+        public Location endLocation { get; set; }
+
+      //  [JsonIgnore]
+        public List<Location> Locations { get; set; }
     }
 }
