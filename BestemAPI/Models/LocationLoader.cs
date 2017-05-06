@@ -40,10 +40,10 @@ namespace BestemAPI.Models
                     list.Add(leg.start_location);
                     foreach (Step step in leg.steps)
                     {
-                        if (IsTooClose(list[list.Count - 1], step.start_location))
+                        if ( !IsTooClose(list[list.Count - 1], step.start_location) )
                         {
                             list.Add(step.start_location);
-                            //System.Diagnostics.Debug.Write(step.start_location.ToString());
+                       
                         }
 
                     }
@@ -51,8 +51,7 @@ namespace BestemAPI.Models
                 }
             }
 
-            //
-            //LocationManager.insertLocation(list);
+
             return list;
 
         }
@@ -70,8 +69,8 @@ namespace BestemAPI.Models
             request += "key=" + API_KEY;
 
 
-            Console.WriteLine(request);
-
+            
+            System.Diagnostics.Debug.Write(request);
 
             return request;
 
@@ -84,7 +83,11 @@ namespace BestemAPI.Models
         {
 
 
-            if (GetDistanceInKm(lastloc, loc) < 2) return true;
+            if (GetDistanceInKm(lastloc, loc) < 2.5) {
+
+                System.Diagnostics.Debug.Write("Is too close SESSION!");
+                return true;
+            }
 
             return false;
 

@@ -13,7 +13,7 @@ namespace BestemAPI.Models.ConnectionManager {
 
         public static Location GetLocationById(int LocationID) {
             Location loc = null;
-            System.Diagnostics.Debug.Write("WTF DCC");
+
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 if (con.State == ConnectionState.Closed) con.Open();
 
@@ -44,7 +44,7 @@ namespace BestemAPI.Models.ConnectionManager {
 
         public static List<Location> GetLocationsForJob(Job job) {
             List<Location> locationList = new List<Location>();
-            System.Diagnostics.Debug.Write("WTF DCC");
+ 
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 if (con.State == ConnectionState.Closed) con.Open();
 
@@ -59,7 +59,7 @@ namespace BestemAPI.Models.ConnectionManager {
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
-                            System.Diagnostics.Debug.Write(String.Format("Adaug locatia {0}", Convert.ToInt32(reader[2])));
+                
                             locationList.Add(GetLocationById(Convert.ToInt32(reader[2])));
 
                         }
@@ -108,26 +108,29 @@ namespace BestemAPI.Models.ConnectionManager {
             
         }
 
-        public static void insertLocation(Location loc) {
-
+        public static int insertLocation(Location loc) {
+            int locId = -1 ;
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 if (con.State == ConnectionState.Closed) con.Open();
                 try {
 
                     
                     StringBuilder sb = new StringBuilder();
-                    sb.Append("Insert into [dbo].[Location](name, lat, long) Values('");
+                    sb.Append("Insert into [dbo].[Location](name, lat, long) OUTPUT Inserted.Id  Values('");
                     sb.Append(loc.name + "',");
                     sb.Append(loc.lat + ",");
                     sb.Append(loc.lng + ")");
                     SqlCommand cmd = new SqlCommand(sb.ToString(), con);
-                    cmd.ExecuteNonQuery();
-                    
+
+                    locId = Convert.ToInt32(cmd.ExecuteScalar());
+
 
 
                 }
                 catch { }
             }
+
+            return locId;
 
         }
 

@@ -22,7 +22,7 @@ namespace BestemAPI.Models
             this.userID = userID;
             this.startLocation = startLocation;
             this.endLocation = endLocation;
-            Locations = LocationManager.GetLocationsForJob(this);
+           // Locations = LocationManager.GetLocationsForJob(this);
     
 
         }

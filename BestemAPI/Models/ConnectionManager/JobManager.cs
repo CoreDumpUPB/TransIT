@@ -45,6 +45,8 @@ namespace BestemAPI.Models.ConnectionManager {
 
 
                     job.Locations = LocationManager.ComputeLocationsForJob(job); // not tested
+
+
                     insertJobLocations(job);
 
 
@@ -67,7 +69,7 @@ namespace BestemAPI.Models.ConnectionManager {
                     foreach (Location loc in job.Locations) {
 
 
-                        LocationManager.insertLocation(loc);
+                        loc.locationID = LocationManager.insertLocation(loc);
 
                         StringBuilder sb = new StringBuilder();
                         sb.Append("Insert into [dbo].[JLI](jobid,locid) ");
@@ -93,7 +95,7 @@ namespace BestemAPI.Models.ConnectionManager {
         public static List<Job> GetJobsByUserId(int userId) {
 
 
-            System.Diagnostics.Debug.Write("Trebuie sa dau joburile pt");
+        
             List<Job> jobList = new List<Job>();
 
 
@@ -139,6 +141,38 @@ namespace BestemAPI.Models.ConnectionManager {
             return jobList;
 
         }
+
+       /* public static List<Job> GetJobsForLocation(Location loc) {
+            List<Job> jobList = new List<Location>();
+            System.Diagnostics.Debug.Write("WTF DCC");
+            using (SqlConnection con = new SqlConnection(connectionString)) {
+                if (con.State == ConnectionState.Closed) con.Open();
+
+                try {
+
+                    String cmdString = "Select * From [JLI] Where locid=" + loc.locationID;
+
+
+                    SqlCommand cmd = new SqlCommand(cmdString, con);
+
+
+
+                    using (SqlDataReader reader = cmd.ExecuteReader()) {
+                        while (reader.Read()) {
+                            
+                            jobList.Add(GetJobById(Convert.ToInt32(reader[1])));
+
+                        }
+
+                    }
+                }
+                catch { }
+
+
+
+            }
+            return jobList;
+        } */
 
 
         //inutile momentan:

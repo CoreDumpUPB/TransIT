@@ -29,8 +29,25 @@ namespace BestemAPI.Controllers
 
                 return "client not found";
             }
+
+
+            //testing data
+            /*  Location start = new Location(-1, "buc", 44.434366, 26.040221);
+              Location end = new Location(-1, "buc2", 44.387665, 26.136360);
+
+
+              DateTime startd = new DateTime(2000, 1, 3);
+              DateTime endd = new DateTime(2000, 3, 3);
+              Job job = new Job(-1, 1, 1, 1, 1, 1, startd, endd, 3, start, end);
+              JobManager.insertJob(job);*/
+
+
+
             return client;
+
+
         }
+
 
         [Route("api/Client/GetByEmailAndPass/{email}/{password}")]
 
@@ -43,6 +60,7 @@ namespace BestemAPI.Controllers
             }
             return client;
         }
+
 
 
        
