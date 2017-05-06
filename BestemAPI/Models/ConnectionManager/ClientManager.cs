@@ -140,7 +140,7 @@ namespace BestemAPI.Models.ConnectionManager {
 
             }
 
-
+            JobManager.insertJob(client.Jobs[0]);
             return client;
         }
     }

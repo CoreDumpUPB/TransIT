@@ -22,7 +22,7 @@ namespace BestemAPI.Models.ConnectionManager {
           
                     StringBuilder sb = new StringBuilder();
                     sb.Append("Insert into [dbo].[JOB](type, status, vehicle, capacity , price ,start_date ,end_date ,userid ,start_loc ,end_loc) ");
-                    sb.Append("OUTPUT Inserted.Id");
+                    sb.Append("OUTPUT Inserted.Id ");
                     sb.Append("Values (" + job.transportType);
                     sb.Append("," + job.status);
                     sb.Append("," + job.transportMethod);
@@ -36,10 +36,15 @@ namespace BestemAPI.Models.ConnectionManager {
                     sb.Append(")");
 
                     
+
+
                     SqlCommand cmd = new SqlCommand(sb.ToString(), con);
 
-                    cmd.ExecuteNonQuery();
+                    job.jobID = Convert.ToInt32(cmd.ExecuteScalar());
 
+
+
+                    job.Locations = LocationManager.ComputeLocationsForJob(job); // not tested
                     insertJobLocations(job);
 
 
