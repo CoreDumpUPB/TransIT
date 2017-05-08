@@ -142,37 +142,87 @@ namespace BestemAPI.Models.ConnectionManager {
 
         }
 
-       /* public static List<Job> GetJobsForLocation(Location loc) {
-            List<Job> jobList = new List<Location>();
-            System.Diagnostics.Debug.Write("WTF DCC");
+
+        public static List<Job> GetAllJobs( ) {
+
+
+
+            List<Job> jobList = new List<Job>();
+
+
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 if (con.State == ConnectionState.Closed) con.Open();
 
+
                 try {
 
-                    String cmdString = "Select * From [JLI] Where locid=" + loc.locationID;
-
-
+                    String cmdString = "Select * From [JOB]";
                     SqlCommand cmd = new SqlCommand(cmdString, con);
 
-
-
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
+
                         while (reader.Read()) {
-                            
-                            jobList.Add(GetJobById(Convert.ToInt32(reader[1])));
+
+                            jobList.Add(new Job(Convert.ToInt32(reader[0]),
+                               Convert.ToInt32(reader[1]),
+                               Convert.ToInt32(reader[2]),
+                               Convert.ToInt32(reader[3]),
+                               (float)Convert.ToDouble(reader[4]),
+                               (float)Convert.ToDouble(reader[5]),
+                               DateTime.Parse(reader[6].ToString()),
+                               DateTime.Parse(reader[7].ToString()),
+                               Convert.ToInt32(reader[8]),
+                               LocationManager.GetLocationById(Convert.ToInt32(reader[9])),
+                               LocationManager.GetLocationById(Convert.ToInt32(reader[10]))
+                               ));
 
                         }
-
                     }
+
+
+
                 }
-                catch { }
-
-
+                catch {
+                    //exception handle
+                }
+                finally { }
 
             }
+
             return jobList;
-        } */
+
+        }
+        /* public static List<Job> GetJobsForLocation(Location loc) {
+             List<Job> jobList = new List<Location>();
+             System.Diagnostics.Debug.Write("WTF DCC");
+             using (SqlConnection con = new SqlConnection(connectionString)) {
+                 if (con.State == ConnectionState.Closed) con.Open();
+
+                 try {
+
+                     String cmdString = "Select * From [JLI] Where locid=" + loc.locationID;
+
+
+                     SqlCommand cmd = new SqlCommand(cmdString, con);
+
+
+
+                     using (SqlDataReader reader = cmd.ExecuteReader()) {
+                         while (reader.Read()) {
+
+                             jobList.Add(GetJobById(Convert.ToInt32(reader[1])));
+
+                         }
+
+                     }
+                 }
+                 catch { }
+
+
+
+             }
+             return jobList;
+         } */
 
 
         //inutile momentan:
