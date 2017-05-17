@@ -19,22 +19,21 @@ namespace BestemAPI.Models.ConnectionManager {
 
                 try {
 
-                    String cmdString = "Select * From [Location] Where Id=" + LocationID;
-
-
+                    String cmdString = "Select name,coord.Lat,coord.Long From [Location] Where Id=" + LocationID;
                     SqlCommand cmd = new SqlCommand(cmdString, con);
-
-
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         if (reader.Read()) {
-                            loc = new Location(LocationID, reader[1].ToString(), Convert.ToDouble(reader[2]), Convert.ToDouble(reader[3]));
+                           loc = new Location(LocationID, reader[0].ToString(), Convert.ToDouble(reader[1]), Convert.ToDouble(reader[2]));
                             
                         }
 
                     }
                 }
-                 catch {}
+                catch {
+                    
+                    throw;
+                }
       
 
 
@@ -80,33 +79,14 @@ namespace BestemAPI.Models.ConnectionManager {
             List<Location> locationList = new List<Location>();
 
             LocationLoader locLoad = new LocationLoader();
+
+   
             locationList = locLoad.getIntermediateLocations(job.startLocation, job.endLocation);
 
             return locationList;
         }
 
-        public static void insertLocations(List<Location> locationList) {
 
-            using (SqlConnection con = new SqlConnection(connectionString)) {
-                if (con.State == ConnectionState.Closed) con.Open();
-                try {
-                    
-                    foreach (Location loc in locationList) {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append("Insert into [dbo].[Location](name, lat, long) Values('");
-                        sb.Append(loc.name + "',");
-                        sb.Append(loc.lat + ",");
-                        sb.Append(loc.lng + ")");
-                        SqlCommand cmd = new SqlCommand(sb.ToString(), con);
-                        cmd.ExecuteNonQuery();
-                    }
-                  
-
-                }
-                catch { }
-            }
-            
-        }
 
         public static int insertLocation(Location loc) {
             int locId = -1 ;
@@ -116,11 +96,14 @@ namespace BestemAPI.Models.ConnectionManager {
 
                     
                     StringBuilder sb = new StringBuilder();
-                    sb.Append("Insert into [dbo].[Location](name, lat, long) OUTPUT Inserted.Id  Values('");
+                    sb.Append("Insert into [dbo].[Location](name, coord) OUTPUT Inserted.Id  Values('");
                     sb.Append(loc.name + "',");
-                    sb.Append(loc.lat + ",");
-                    sb.Append(loc.lng + ")");
+                    sb.Append("geography::Point(" + loc.lat + "," + loc.lng + ",4326));");
+
+                    //geography::STGeomFromText('POINT(55.9271035250276 -3.29431266523898)',4326));
+
                     SqlCommand cmd = new SqlCommand(sb.ToString(), con);
+                    
 
                     locId = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -130,12 +113,36 @@ namespace BestemAPI.Models.ConnectionManager {
                 catch { }
             }
 
+            System.Diagnostics.Debug.Write("I've inserted a location with id " + locId);
+
             return locId;
 
         }
 
 
+        /* public static void insertLocations(List<Location> locationList) {
 
+             using (SqlConnection con = new SqlConnection(connectionString)) {
+                 if (con.State == ConnectionState.Closed) con.Open();
+                 try {
+
+                     foreach (Location loc in locationList) {
+
+                         StringBuilder sb = new StringBuilder();
+                         sb.Append("Insert into [dbo].[Location](name, lat, long) Values('");
+                         sb.Append(loc.name + "',");
+                         sb.Append(loc.lat + ",");
+                         sb.Append(loc.lng + ")");
+                         SqlCommand cmd = new SqlCommand(sb.ToString(), con);
+                         cmd.ExecuteNonQuery();
+                     }
+
+
+                 }
+                 catch { }
+             }
+
+         }*/
         /* public static Location searchLocation(float lat1, float long1, SqlConnection connection) {
              Location loc = null;
              String cmdString = "Select * From [dbo].[Location] Where lat=" + lat1;

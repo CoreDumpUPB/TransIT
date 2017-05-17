@@ -188,3 +188,8 @@ C:\Users\Radu\Desktop\TransIT\BestemAPI\bin\zh-Hant\Microsoft.Spatial.resources.
 C:\Users\Radu\Desktop\TransIT\BestemAPI\obj\Debug\TransAPI.csprojResolveAssemblyReference.cache
 C:\Users\Radu\Desktop\TransIT\BestemAPI\obj\Debug\BestemAPI.dll
 C:\Users\Radu\Desktop\TransIT\BestemAPI\obj\Debug\BestemAPI.pdb
+C:\Users\Radu\Desktop\TransIT\BestemAPI\bin\SqlServerTypes\x64\msvcr120.dll
+C:\Users\Radu\Desktop\TransIT\BestemAPI\bin\SqlServerTypes\x64\SqlServerSpatial140.dll
+C:\Users\Radu\Desktop\TransIT\BestemAPI\bin\SqlServerTypes\x86\msvcr120.dll
+C:\Users\Radu\Desktop\TransIT\BestemAPI\bin\SqlServerTypes\x86\SqlServerSpatial140.dll
+C:\Users\Radu\Desktop\TransIT\BestemAPI\bin\Microsoft.SqlServer.Types.dll

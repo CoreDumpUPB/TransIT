@@ -23,7 +23,12 @@ namespace BestemAPI.Models
 
         public List<Location> getIntermediateLocations(Location start, Location end)
         {
+
+            
             List<Location> list = new List<Location>();
+           // list.Add(start);
+            //list.Add(end);
+            if (GetDistanceInKm(start, end) > 3000) return list;
 
             var request = (HttpWebRequest)WebRequest.Create(ComputeRequestUrl(start, end));
 
@@ -83,7 +88,7 @@ namespace BestemAPI.Models
         {
 
 
-            if (GetDistanceInKm(lastloc, loc) < 2.5) {
+            if (GetDistanceInKm(lastloc, loc) < 2) {
 
                 System.Diagnostics.Debug.Write("Is too close SESSION!");
                 return true;

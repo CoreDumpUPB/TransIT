@@ -24,6 +24,8 @@ namespace BestemAPI.Controllers
 
 
            Client client = ClientManager.getClientbyID(id);
+
+
             if (client == null)
             {
 
@@ -49,17 +51,6 @@ namespace BestemAPI.Controllers
         }
 
 
-        [Route("api/Client/GetByEmailAndPass/{email}/{password}")]
-
-        public Object GetClient( String email, String password)
-        {
-            Client client = ClientManager.getClientbyEmail(email, password);
-            if(client == null)
-            {
-                return "client not found";
-            }
-            return client;
-        }
 
 
 
@@ -91,15 +82,60 @@ namespace BestemAPI.Controllers
 
 
 
+        [HttpPost]
+        [Route("api/Client/Register")]
+        public HttpResponseMessage Post([FromBody] Client client) {
+
+            try {
+                ClientManager.insertClient(client);
+
+                 return Request.CreateResponse(HttpStatusCode.Created, client);
+             }
+             catch (Exception ex) {
+
+                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
+
+             }
+      
+        }
+
+
+
+        public class LoginModel {
+            public string email;
+            public string password;
+        }
 
         [HttpPost]
-        // POST: api/Client
-        public Object Post([FromUri] String email, [FromUri] String password, [FromUri] String name, [FromUri] String phoneNumber)
-        {
+        [Route("api/Client/Login")]
+        public HttpResponseMessage PostLog(LoginModel lm) {
 
-            //return ClientManager.insertClient(new Client(-1, name, phoneNumber, email, password,null));
-            return null;
-        }
+
+            try {
+
+                string email = lm.email;
+                string password = lm.password;
+
+                Client foundClient = ClientManager.CheckClient(email,password);
+
+                if(foundClient != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, foundClient);
+
+                else return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            catch (Exception ex) {
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
+
+            }
+
+
+        }   
+   
+        
+   
+
+        
 
 
         [HttpPut]

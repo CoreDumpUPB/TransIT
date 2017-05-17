@@ -22,8 +22,9 @@ namespace BestemAPI.Models
             this.userID = userID;
             this.startLocation = startLocation;
             this.endLocation = endLocation;
-           // Locations = LocationManager.GetLocationsForJob(this);
-    
+            Locations = new List<Location>();
+
+
 
         }
 
@@ -39,7 +40,21 @@ namespace BestemAPI.Models
         public Location startLocation { get; set; }
         public Location endLocation { get; set; }
 
-      //  [JsonIgnore]
+        [JsonIgnore]
+        public List<Job> MatchedJobs {get; set; }
+
+       [JsonIgnore]
         public List<Location> Locations { get; set; }
+
+
+        public override int GetHashCode() {
+            return this.jobID;
+        }
+
+        public override bool Equals(object other) {
+            if (other is Job)
+                return ((Job)other).jobID == this.jobID;
+            return false;
+        }
     }
 }

@@ -11,7 +11,9 @@ namespace BestemAPI
     {
         protected void Application_Start()
         {
+            SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
         }
     }
 }

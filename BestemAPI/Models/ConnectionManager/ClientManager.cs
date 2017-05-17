@@ -11,35 +11,41 @@ namespace BestemAPI.Models.ConnectionManager {
     public static class ClientManager {
         public static String connectionString = DbManager.connectionString;
 
-        /*public static Object insertClient(Client client) { trb rescris
+        public static int insertClient(Client client) {
+
+             using (SqlConnection con = new SqlConnection(connectionString)) {
+                if (con.State == ConnectionState.Closed) con.Open();
+
+                try {
+          
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("Insert into [dbo].[User](nume, phone, email, password) ");
+                    sb.Append("Output INSERTED.Id ");
+                    sb.Append("Values ('");
+                    sb.Append(client.name);
+                    sb.Append("' ,'");
+                    sb.Append(client.phoneNumber);
+                    sb.Append("' ,'");
+                    sb.Append(client.email);
+                    sb.Append("' ,'");
+                    sb.Append(client.password);
+                    sb.Append("' )");
+
+                    SqlCommand cmd = new SqlCommand(sb.ToString(), con);
+
+                    client.clientID = Convert.ToInt32(cmd.ExecuteScalar());
+                    return client.clientID;
 
 
-            if (client == null)
-                return "Wrong parameters";
-            //SqlConnection connection = DbManager.getConnection();
-            try {
-                DbManager.connection.Open();
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Insert into [dbo].[User](nume, phone, email, password) ");
-                sb.Append("Output INSERTED.Id ");
-                sb.Append("Values ('");
-                sb.Append(client.name);
-                sb.Append("' ,'");
-                sb.Append(client.phoneNumber);
-                sb.Append("' ,'");
-                sb.Append(client.email);
-                sb.Append("' ,'");
-                sb.Append(client.password);
-                sb.Append("' )");
-                SqlCommand cmd = new SqlCommand(sb.ToString(), DbManager.connection);
+                }
 
-                client.clientID = Convert.ToInt32(cmd.ExecuteScalar());
-                DbManager.connection.Close();
-                return client.clientID;
+                catch(Exception exp) {
+                    throw exp;
+                }
+
             }
-            catch { DbManager.connection.Close(); return "Error during database connection"; }
 
-        }*/
+        }
 
         public static Client getClientbyEmail(String email) {
 
@@ -59,9 +65,10 @@ namespace BestemAPI.Models.ConnectionManager {
                         using (SqlDataReader reader = cmd.ExecuteReader()) {
                             if (reader.Read()) {
 
-                                int clientId = Convert.ToInt32(reader[0]);
-                                client = new Client(clientId, reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), JobManager.GetJobsByUserId(clientId));
-                            }
+                                
+                                client = new Client(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString());
+                        
+                        }
                         }
 
                         
@@ -76,39 +83,48 @@ namespace BestemAPI.Models.ConnectionManager {
 
         
 
-        public static Client getClientbyEmail(String email, String password) {
+        public static Client CheckClient(string email, string password) {
 
-            Client client = null;
+   
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 if (con.State == ConnectionState.Closed) con.Open();
 
                 try {
 
-
-             
-                    String cmdString = "Select * From [dbo].[User] Where email='" + email + "' AND password='" + password + "'";
-
+                    String cmdString = "SELECT * From [dbo].[User] Where email='" + email + "' AND password='" + password + "'";
                     SqlCommand cmd = new SqlCommand(cmdString, con);
-                    
+                    System.Diagnostics.Debug.Write(cmdString);
+                    Client clientEdited = null;
+
+                    System.Diagnostics.Debug.Write("Verific client!");
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
 
                         if (reader.Read()) {
 
-                            int clientId = Convert.ToInt32(reader[0]);
-                            client = new Client(clientId, reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), JobManager.GetJobsByUserId(clientId));
+                            
+                            clientEdited = new Client(Convert.ToInt32(reader[0]),reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString());
+             
                         }
                     }
 
-            
-                    
+
+                    return clientEdited;
+
+
+
+
                 }
-                catch {return null; }
+                catch(Exception ex) {
+                    throw ex;
+                }
 
             }
 
-            return client;
+         
         }
 
+
+ 
         public static Client getClientbyID(int ID) {
             //SqlConnection connection = DbManager.getConnection();
 
@@ -126,9 +142,11 @@ namespace BestemAPI.Models.ConnectionManager {
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         if (reader.Read()) {
-                            int clientId = Convert.ToInt32(reader[0]);
 
-                            client = new Client(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), JobManager.GetJobsByUserId(clientId));
+                            
+                            client = new Client(ID,reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString());
+                   
+
                         }
                     }
 

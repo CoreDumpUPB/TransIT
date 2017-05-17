@@ -35,24 +35,20 @@ namespace BestemAPI.Models.ConnectionManager {
                     sb.Append("," + job.endLocation.locationID);
                     sb.Append(")");
 
-                    
 
+                    System.Diagnostics.Debug.Write("job start id " + job.startLocation.locationID);
 
                     SqlCommand cmd = new SqlCommand(sb.ToString(), con);
 
                     job.jobID = Convert.ToInt32(cmd.ExecuteScalar());
+                    JobManager.InsertJobSELocations(job);
 
-
-
-                    job.Locations = LocationManager.ComputeLocationsForJob(job); // not tested
-
-
-                    insertJobLocations(job);
+                    insertJobLocations(job); // insert in JLI
 
 
                 }
                 catch(Exception exp) {
-                    System.Diagnostics.Debug.Write(exp.Message);
+                    throw exp;
                 }
 
             }
@@ -61,15 +57,19 @@ namespace BestemAPI.Models.ConnectionManager {
 
         private static void insertJobLocations(Job job) {
 
+            job.Locations.AddRange( LocationManager.ComputeLocationsForJob(job) ); // not tested
             
             using (SqlConnection con = new SqlConnection(connectionString)) {
+
                 if (con.State == ConnectionState.Closed) con.Open();
                 try {
 
                     foreach (Location loc in job.Locations) {
 
-
+              
                         loc.locationID = LocationManager.insertLocation(loc);
+
+                     
 
                         StringBuilder sb = new StringBuilder();
                         sb.Append("Insert into [dbo].[JLI](jobid,locid) ");
@@ -87,14 +87,108 @@ namespace BestemAPI.Models.ConnectionManager {
                 catch { }
 
             }
-
+            System.Diagnostics.Debug.Write("job start id " + job.startLocation.locationID);
         }
 
 
+        public static void InsertJobSELocations(Job job) {
+
+            
+
+            using (SqlConnection con = new SqlConnection(connectionString)) {
+
+                if (con.State == ConnectionState.Closed) con.Open();
+                try {
+
+                    
+
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("Insert into [dbo].[JLI](jobid,locid) ");
+                        sb.Append("Values (" + job.jobID);
+                        sb.Append("," + job.startLocation.locationID);
+                        sb.Append(" )");
+
+                        System.Diagnostics.Debug.Write(sb.ToString());
+                        SqlCommand cmd = new SqlCommand(sb.ToString(), con);
+
+                        cmd.ExecuteNonQuery();
+                    
+
+                }
+                catch { }
+
+            }
+
+            using (SqlConnection con = new SqlConnection(connectionString)) {
+
+                if (con.State == ConnectionState.Closed) con.Open();
+                try {
+
+
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("Insert into [dbo].[JLI](jobid,locid) ");
+                    sb.Append("Values (" + job.jobID);
+                    sb.Append("," + job.endLocation.locationID);
+                    sb.Append(" )");
+
+                    System.Diagnostics.Debug.Write(sb.ToString());
+                    SqlCommand cmd = new SqlCommand(sb.ToString(), con);
+
+                    cmd.ExecuteNonQuery();
+
+
+                }
+                catch { }
+
+            }
+
+        }
+        public static Job GetJobById(int jobId) {
+
+            Job job=null;
+
+            using (SqlConnection con = new SqlConnection(connectionString)) {
+                if (con.State == ConnectionState.Closed) con.Open();
+
+                try {
+
+                    String cmdString = "Select * From [JOB] Where Id=" + jobId;
+                    SqlCommand cmd = new SqlCommand(cmdString, con);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader()) {
+                        if (reader.Read()) {
+                            job = new Job(Convert.ToInt32(reader[0]),
+                               Convert.ToInt32(reader[1]),
+                               Convert.ToInt32(reader[2]),
+                               Convert.ToInt32(reader[3]),
+                               (float)Convert.ToDouble(reader[4]),
+                               (float)Convert.ToDouble(reader[5]),
+                               DateTime.Parse(reader[6].ToString()),
+                               DateTime.Parse(reader[7].ToString()),
+                               Convert.ToInt32(reader[8]),
+                               LocationManager.GetLocationById(Convert.ToInt32(reader[9])),
+                               LocationManager.GetLocationById(Convert.ToInt32(reader[10]))
+                               );
+
+                        }
+
+                    }
+                }
+                catch {
+
+                    throw;
+                }
+
+
+
+            }
+            return job;
+        }
 
         public static List<Job> GetJobsByUserId(int userId) {
 
-
+            System.Diagnostics.Debug.Write("Getting jobs for userid" + userId);
         
             List<Job> jobList = new List<Job>();
 
@@ -131,8 +225,10 @@ namespace BestemAPI.Models.ConnectionManager {
 
 
                 }
-                catch {
-                    //exception handle
+                catch(Exception ex){
+
+                    System.Diagnostics.Debug.Write("AICI DA EXCEPTIE");
+                  
                 }
                 finally {  }
 
@@ -192,17 +288,18 @@ namespace BestemAPI.Models.ConnectionManager {
             return jobList;
 
         }
-        /* public static List<Job> GetJobsForLocation(Location loc) {
-             List<Job> jobList = new List<Location>();
-             System.Diagnostics.Debug.Write("WTF DCC");
+        public static List<Job> GetJobsForLocationId(int locationId) {
+             List<Job> jobList = new List<Job>();
+
+             
              using (SqlConnection con = new SqlConnection(connectionString)) {
                  if (con.State == ConnectionState.Closed) con.Open();
 
                  try {
 
-                     String cmdString = "Select * From [JLI] Where locid=" + loc.locationID;
+                     String cmdString = "Select * From [JLI] Where locid=" + locationId;
 
-
+                    System.Diagnostics.Debug.Write("Getting jobs for location " + locationId);
                      SqlCommand cmd = new SqlCommand(cmdString, con);
 
 
@@ -210,19 +307,21 @@ namespace BestemAPI.Models.ConnectionManager {
                      using (SqlDataReader reader = cmd.ExecuteReader()) {
                          while (reader.Read()) {
 
-                             jobList.Add(GetJobById(Convert.ToInt32(reader[1])));
+                            System.Diagnostics.Debug.Write("Adding to the joblist " + Convert.ToInt32(reader[1]));
+                            jobList.Add(GetJobById(Convert.ToInt32(reader[1])));
 
                          }
 
                      }
                  }
-                 catch { }
+                 catch {
+
+                 }
+            }
 
 
-
-             }
              return jobList;
-         } */
+         } 
 
 
         //inutile momentan:
